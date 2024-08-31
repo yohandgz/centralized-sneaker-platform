@@ -148,6 +148,15 @@ function getRandomHeaders() {
     return headersList[randomIndex];
 }
 
+async function randomMovement(page, randomWeight) {
+    const mouse = page.mouse;
+    await mouse.move(randomWeight + Math.random() * 50, Math.random() * randomWeight);
+    await page.waitForTimeout(Math.random() * randomWeight + 20);
+    const scroll = Math.random() * randomeWeight * 10;
+    await page.evaluate(scroll => window.scrollTo(0, scroll), scroll);
+    await page.waitForTimeout(Math.random() * randomWeight + 10);
+}
+
 (async () => {
     const browser = await chromium.launch({ headless: false });
     const context = await browser.newContext({
@@ -159,16 +168,8 @@ function getRandomHeaders() {
     const searchEngineNum = getRandomBinary();
     await searchPage.goto(searchEngines[searchEngineNum]);
     
-    const mouse = searchPage.mouse;
-    await mouse.move(100 + Math.random() * 50, 100 + Math.random() * 50);
-    const scroll1 = Math.random() * 3000;
-    await searchPage.evaluate((scroll1) => window.scrollTo(0, scroll1), scroll1);
-    await searchPage.waitForTimeout(Math.random() * 1000);
-    await mouse.move(200 + Math.random() * 50, 200 + Math.random() * 50);
-    await searchPage.waitForTimeout(Math.random() * 1000);
-    const scroll2 = Math.random() * 1200;
-    await searchPage.evaluate((scroll2) => window.scrollTo(0, scroll2), scroll2);
-    await searchPage.waitForTimeout(Math.random() * 5000);
+    randomMovement(searchPage, 100);
+    randomMovement(searchPage, 200);
 
     let page;
     const [newTab] = await Promise.all([
@@ -183,10 +184,66 @@ function getRandomHeaders() {
     const title = await page.title();
     console.log(title);
 
-    await page.waitForSelector("a[href='/category/sneakers']");
-    await page.click("a[href='/category/sneakers']");
+    await page.waitForSelector('a[href="/category/sneakers"]');
+    await page.click('a[href="/category/sneakers"]');
 
-    await page.waitForTimeout(500000000);
+    // Manually inputting category attributes to scrape 1 by 1 to not get detected
+    scrapeJordans(page);
+
+    await page.waitForTimeout(1000000);
 
     await browser.close();
 })();
+
+async function scrapeJordans(page) {
+    randomMovement(page, 200);
+
+    await page.waitForSelector('.css-1vuu0gw')
+    await page.click('span:text("Jordan")');
+
+    await page.waitForSelector('#product-results')
+    const productResults = await page.$('#product-results')
+    console.log(productResults)
+
+    const productData = productResults.map(sneaker => [
+        page.$('[data-testid="product-tile-title"]'),
+
+    ])
+    // notes on how to continue below 
+    // | | |
+    // V V V
+}
+
+// mySql notes
+// name, image, link, create price history, then construct scrollable 
+
+// todo: think about how to track price over time
+// how will we operate background script to run as user goes? 
+// for now, we'll have an array for price. each item in the array will be one time we scraped the data, index 0 will be the date, index 1 will be the price. everytime the user asks for it, we will append. 
+// in the future we'll create a separate script that scrapes if needed to when a specific sneaker is requested
+
+// figure out why kobe 10 elite christmas image and link have different id substrings. one has Nike-Kobe-10-elite and the other is kobe-10-elite
+// there is no direct correlation between image link and id link. instead, just use substring from product result image for constructing scrollable, not the link link. so only use link for its intended purpose: going to the link:)
+
+
+// img notes
+
+// available image src in product results
+//<img src="https://images.stockx.com/images/Air-Jordan-4-Retro-White-Thunder-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&auto=format%2Ccompress&dpr=1&trim=color&updated_at=1722353047&q=57">
+//<img src="https://images.stockx.com/images/Air-Jordan-4-Retro-White-Thunder-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&auto=format%2Ccompress&dpr=2&trim=color&updated_at=1722353047&q=60">
+//<img src="https://images.stockx.com/images/Air-Jordan-4-Retro-White-Thunder-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=75&auto=format%2Ccompress&dpr=3&trim=color&updated_at=1722353047&q=41">
+
+// 3 levels of size. the ony differences are dpr={1, 2, 3} and q={57, 60, 41}
+
+// scrollables, not available, but can be produced
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=1&updated_at=1722284580&h=384&q=57">
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=2&updated_at=1722284580&h=384&q=60">
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=3&updated_at=1722284580&h=384&q=41">
+
+// =384 is same for all sneakers
+// scrollables don't need updated_at. it can be like this: 
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57">
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=2&q=60">
+//<img src="https://images.stockx.com/360/Air-Jordan-4-Retro-White-Thunder/Images/Air-Jordan-4-Retro-White-Thunder/Lv2/img13.jpg?auto=format%2Ccompress&w=576&dpr=3&q=41">
+// 3 levels of size. dpr={1, 2, 3} and q={57, 60, 41}
+// scroll is from img{01-36}
