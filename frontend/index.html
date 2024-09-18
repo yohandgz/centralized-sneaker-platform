@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoe Rotation</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        #shoe-container {
+            width: 450px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        #shoe-container img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        input[type="range"] {
+            margin-top: 20px;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="shoe-container">
+        <img id="shoeImage" src="https://images.stockx.com/360/air-jordan-2-retro-j-balvin/Images/air-jordan-2-retro-j-balvin/Lv2/img01.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57" alt="Shoe Image">
+    </div>
+
+    <input type="range" id="slider" min="1" max="36" value="1">
+
+    <script>
+        const imgElement = document.getElementById('shoeImage');
+        const slider = document.getElementById('slider');
+        const totalImages = 36;
+
+        // Preload all images
+        const shoeImages = [];
+        for (let i = 1; i <= totalImages; i++) {
+            const img = new Image();
+            const imageNumber = String(i).padStart(2, '0');
+            img.src = `https://images.stockx.com/360/air-jordan-2-retro-j-balvin/Images/air-jordan-2-retro-j-balvin/Lv2/img${imageNumber}.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57`;
+            shoeImages.push(img);
+        }
+
+        slider.addEventListener('input', () => {
+            const imageNumber = String(slider.value).padStart(2, '0');
+            imgElement.src = `https://images.stockx.com/360/air-jordan-2-retro-j-balvin/Images/air-jordan-2-retro-j-balvin/Lv2/img${imageNumber}.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57`;
+            
+            // Preload next and previous images
+            const nextImageNumber = String(Math.min(Number(slider.value) + 1, totalImages)).padStart(2, '0');
+            const prevImageNumber = String(Math.max(Number(slider.value) - 1, 1)).padStart(2, '0');
+            
+            new Image().src = `https://images.stockx.com/360/air-jordan-2-retro-j-balvin/Images/air-jordan-2-retro-j-balvin/Lv2/img${nextImageNumber}.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57`;
+            new Image().src = `https://images.stockx.com/360/air-jordan-2-retro-j-balvin/Images/air-jordan-2-retro-j-balvin/Lv2/img${prevImageNumber}.jpg?auto=format%2Ccompress&w=576&dpr=1&q=57`;
+        });
+    </script>
+</body>
+</html>
