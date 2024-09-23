@@ -18,7 +18,7 @@ async function getSneakerData(searchInput){
     
   try {
       const response = await axios.request(options)
-      const filteredData = response.data.data.results.map(sneaker => [sneaker.urlKey, sneaker.name, sneaker.title, sneaker.brand, sneaker.description, sneaker.model, sneaker.media, sneaker.productTraits[0], sneaker.productTraits[1], sneaker.market])
+      const filteredData = response.data.data.results.map(sneaker => [sneaker.urlKey, sneaker.title, sneaker.name, sneaker.brand, sneaker.model, sneaker.media, [sneaker.description, sneaker.productTraits[0], sneaker.productTraits[1], sneaker.market]])
       return filteredData
   } catch (error) {
       console.error(error);

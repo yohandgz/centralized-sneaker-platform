@@ -1,4 +1,4 @@
-const mysql = require('mysql')
+const mysql = require('mysql2')
 
 // loading environment just incase there's non entry point activity
 require('dotenv').config()
@@ -10,9 +10,9 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 })
 
-db.connect(err => {
-  if (err) {
-    console.error('Database connection failed:', err.stack);
+db.connect(error => {
+  if (error) {
+    console.error('Database connection failed:', error);
     return;
   }
   console.log('Connected to database.');

@@ -25,3 +25,16 @@
 
 //once everything is done we can have users sign in and build their own pinterest board:)))))))
 
+
+
+//image notes: 
+//small url and smaller url: 
+//300->140
+//214->100
+//"https://images.stockx.com/images/Vans-Slip-On-47-V-DX-David-Bowie-Hunky-Dory-Product.jpg?fit=fill&bg=FFFFFF&w=300&h=214&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1626899069"
+//"https://images.stockx.com/images/Vans-Slip-On-47-V-DX-David-Bowie-Hunky-Dory-Product.jpg?fit=fill&bg=FFFFFF&w=140&h=100&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1626899069"
+
+
+//"https://images.stockx.com/images/Nike-SB-Dunk-Low-Ben-Jerrys-Chunky-Dunky-FF-Packaging-Product.png?fit=fill&bg=FFFFFF&w=300&h=214&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1696534946"
+//"https://images.stockx.com/images/Nike-SB-Dunk-Low-Ben-Jerrys-Chunky-Dunky-FF-Packaging-Product.png?fit=fill&bg=FFFFFF&w=140&h=100&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1696534946"
+
